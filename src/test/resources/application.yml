@@ -1,0 +1,13 @@
+spring:
+  cache:
+    type: caffeine
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key: test_key
+      model-name: gpt-4o
+app:
+  api-keys:
+    anthropic: test_key
+    deepseek: test_key
+    tushare: ${TUSHARE_TOKEN:test_token_placeholder}
