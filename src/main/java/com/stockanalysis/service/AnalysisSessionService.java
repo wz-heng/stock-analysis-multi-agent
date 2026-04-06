@@ -20,6 +20,7 @@ public class AnalysisSessionService {
 
     private final ApplicationEventPublisher eventPublisher;
     private final Map<String, Sinks.Many<String>> sinks = new ConcurrentHashMap<>();
+    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
 
     public AnalysisSessionService(ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
@@ -47,10 +48,14 @@ public class AnalysisSessionService {
 
         Sinks.Many<String> sink = sinks.get(sessionId);
         if (sink != null) {
-            String escaped = message.replace("\\", "\\\\").replace("\"", "\\\"");
-            String ssePayload = String.format(
-                "{\"stage\":\"%s\",\"message\":\"%s\"}", stage.name(), escaped);
-            sink.tryEmitNext(ssePayload);
+            try {
+                String ssePayload = objectMapper.writeValueAsString(
+                    java.util.Map.of("stage", stage.name(), "message", message));
+                sink.tryEmitNext(ssePayload);
+            } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+                log.error("Failed to serialize SSE event", e);
+                sink.tryEmitNext("{\"stage\":\"" + stage.name() + "\",\"message\":\"serialization_error\"}");
+            }
 
             if (stage == AnalysisStage.ANALYSIS_COMPLETED || stage == AnalysisStage.ANALYSIS_FAILED) {
                 sink.tryEmitComplete();
