@@ -2,6 +2,7 @@ package com.stockanalysis.data;
 
 import com.stockanalysis.model.stock.DailyPrice;
 import com.stockanalysis.model.stock.StockInfo;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// 集成测试：需要真实 Tushare token。运行方式：
+// TUSHARE_TOKEN=your_token mvn test -Dtest=TushareProviderTest
+@Tag("integration")
 @SpringBootTest
 @ActiveProfiles("test")
 class TushareProviderTest {
