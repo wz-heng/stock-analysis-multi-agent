@@ -41,7 +41,7 @@ public class PipelineService {
     private InvestmentManagerAgentService investmentManagerAgent;
 
     public PipelineService(
-            ChatLanguageModel gpt4oModel,
+            @Qualifier("openAiChatModel") ChatLanguageModel gpt4oModel,
             @Qualifier("deepSeekChatModel") ChatLanguageModel deepSeekModel,
             TushareProvider tushareProvider,
             EastMoneyProvider eastMoneyProvider,

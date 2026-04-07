@@ -32,7 +32,7 @@ public class DebateService {
     private ArbitratorAgentService arbitratorAgent;
 
     public DebateService(
-            ChatLanguageModel gpt4oModel,
+            @Qualifier("openAiChatModel") ChatLanguageModel gpt4oModel,
             @Qualifier("anthropicChatModel") ChatLanguageModel anthropicModel,
             @Qualifier("deepSeekChatModel") ChatLanguageModel deepSeekModel,
             AnalysisSessionService sessionService,
