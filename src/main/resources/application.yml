@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: stock-analysis-multi-agent
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=3600s
+  task:
+    execution:
+      pool:
+        core-size: 4
+        max-size: 20
+        queue-capacity: 100
+      thread-name-prefix: analysis-async-
+
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key: ${OPENAI_API_KEY:}
+      model-name: gpt-4o
+      temperature: 0.3
+      timeout: 120s
+
+app:
+  api-keys:
+    anthropic: ${ANTHROPIC_API_KEY:}
+    deepseek: ${DEEPSEEK_API_KEY:}
+    tushare: ${TUSHARE_TOKEN:}
+  cache:
+    daily-price-ttl-hours: 24
+    news-ttl-minutes: 60
+    financial-ttl-days: 7
